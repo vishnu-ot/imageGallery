@@ -12,6 +12,27 @@ function App() {
   const [progress, setProgress] = useState(0);
   const [preview, setPreview] = useState();
 
+  const containerProperties = {
+    display: "flex",
+    gap: 3,
+    marginTop: "20px",
+    width: "70%",
+    flexWrap: "wrap",
+  };
+
+  const displayAllImagesProperty = {
+    width: "200px",
+    height: "200px",
+    objectFit: "cover",
+  };
+
+  const previewImgaeStyle = {
+    width: "200px",
+    height: "200px",
+    marginBottom: "30px",
+    objectFit: "cover",
+  };
+
   const inputRef = useRef(null);
   const imageUploadHandler = () => {
     inputRef.current.click();
@@ -40,6 +61,7 @@ function App() {
       });
       if (response.status === 200) {
         setPreview("");
+        setProgress(0);
         setImageUploadStatus((prev) => !prev);
       }
     } catch (error) {
@@ -60,26 +82,24 @@ function App() {
     getAllData();
   }, [imageUploadStatus]);
 
-  console.log(allImages);
   return (
     <Box>
-      <h1>Photo Gallary </h1>
-      <h5>A picture is worth thousand words</h5>
-      {preview && (
-        <Box>
-          <img
-            src={preview}
-            alt="preview"
-            style={{
-              width: "200px",
-              height: "200px",
-              marginBottom: "30px",
-              objectFit: "cover",
-            }}
-          />
-        </Box>
-      )}
-      <form action="">
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <h1>Photo Gallary </h1>
+        <h5>A picture is worth thousand words</h5>
+        {preview && (
+          <Box>
+            <img src={preview} alt="preview" style={{ ...previewImgaeStyle }} />
+          </Box>
+        )}
+
         <Box onClick={preview ? imageSubmitHandler : imageUploadHandler}>
           <AddCircleOutlineOutlinedIcon />
         </Box>
@@ -96,24 +116,15 @@ function App() {
           style={{ display: "none" }}
           onChange={handleFileChange}
         />
-      </form>
-
-      <Container
-        sx={{
-          display: "flex",
-          gap: 3,
-          marginTop: "20px",
-          width: "70%",
-          flexWrap: "wrap",
-        }}
-      >
+      </Box>
+      <Container sx={{ ...containerProperties }}>
         {allImages.length === 0 && <Typography>Gallary is empty</Typography>}
         {allImages?.map((item) => {
           return (
             <Box>
               <img
                 src={`http://localhost:3000/images/${item}`}
-                style={{ width: "200px", height: "200px", objectFit: "cover" }}
+                style={{ ...displayAllImagesProperty }}
                 alt=""
               />
             </Box>
